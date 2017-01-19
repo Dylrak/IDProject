@@ -29,11 +29,15 @@ def init():
 
 def main():
     init()
-    while True:
-        time.sleep(WAIT_TIME)
-        door_1.ChangeDutyCycle(OPEN_CCW)
-        door_2.ChangeDutyCycle(OPEN_CW)
-        time.sleep(WAIT_TIME)
-        door_1.ChangeDutyCycle(CLOSED_CDC)
-        door_2.ChangeDutyCycle(CLOSED_CDC)
+    try:
+        while True:
+            time.sleep(WAIT_TIME)
+            door_1.ChangeDutyCycle(OPEN_CCW)
+            door_2.ChangeDutyCycle(OPEN_CW)
+            time.sleep(WAIT_TIME)
+            door_1.ChangeDutyCycle(CLOSED_CDC)
+            door_2.ChangeDutyCycle(CLOSED_CDC)
+    except KeyboardInterrupt:
+        GPIO.cleanup()
 main()
+
