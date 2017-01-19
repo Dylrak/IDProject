@@ -1,5 +1,4 @@
 import RPi.GPIO as GPIO
-<<<<<<< HEAD
 import time
 
 #constants
@@ -25,6 +24,3 @@ while True:
     time.sleep(WAIT_TIME)
     pwm_1.ChangeDutyCycle(CLOSED_CDC)
     pwm_2.ChangeDutyCycle(CLOSED_CDC)
-=======
-derp
->>>>>>> b9acfc7e4aa69d8732378fdee7e8c7bec5724c59
