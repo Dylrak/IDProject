@@ -14,7 +14,7 @@ CLOSED_CDC = 1.5
 OPEN_CCW = 0.8
 OPEN_CW = 2.1
 NOCHANGE = 0
-WAIT_TIME = 5
+WAIT_TIME = 2
 
 exitProcess = False
 
@@ -36,13 +36,14 @@ class GateProcess:  # Process to open and close gates
         door_2.start(CLOSED_CDC)
         uID = self.getNFCUID()
         if self.authenticated(uID):
-            self.openDoors()
+            door_1.ChangeDutyCycle(OPEN_CCW)
+            door_2.ChangeDutyCycle(OPEN_CW)
+            time.sleep(WAIT_TIME)
+            door_1.ChangeDutyCycle(CLOSED_CDC)
+            door_2.ChangeDutyCycle(CLOSED_CDC)
+            time.sleep(WAIT_TIME)
 
     def openDoors(self):
-        door_1.ChangeDutyCycle(OPEN_CCW)
-        door_2.ChangeDutyCycle(OPEN_CW)
-        door_1.ChangeDutyCycle(CLOSED_CDC)
-        door_2.ChangeDutyCycle(CLOSED_CDC)
         GPIO.cleanup()
 
     def authenticated(self, uID):
