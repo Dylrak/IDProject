@@ -1,6 +1,7 @@
 import RPi.GPIO as GPIO
-import threading
 import time
+import MFRC522
+import signal
 
 # constants for GPIO(/PWM)
 SERVO_1 = 11
@@ -14,13 +15,13 @@ WAIT_TIME = 1
 exitProcess = False
 
 
-class GateProcess(threading.Thread):
+class GateProcess:
+    # Process to open and close gates
     # global within gateProcess
     door_1 = None
     door_2 = None
 
     def __init__(self):
-        threading.Thread.__init__(self)
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(SERVO_1, GPIO.OUT)
         GPIO.setup(SERVO_2, GPIO.OUT)
@@ -30,29 +31,45 @@ class GateProcess(threading.Thread):
         door_2 = GPIO.PWM(SERVO_2, CLOSED_FREQ)
         door_1.start(CLOSED_CDC)
         door_2.start(CLOSED_CDC)
+        uID = self.getNFCUID()
+        if self.authenticated(uID):
+            self.openDoors()
 
-    def run(self):
-        while not exitProcess:
-            time.sleep(WAIT_TIME)
-            door_1.ChangeDutyCycle(OPEN_CCW)
-            door_2.ChangeDutyCycle(OPEN_CW)
-            time.sleep(WAIT_TIME)
-            door_1.ChangeDutyCycle(CLOSED_CDC)
-            door_2.ChangeDutyCycle(CLOSED_CDC)
+    def openDoors(self):
+        time.sleep(WAIT_TIME)
+        door_1.ChangeDutyCycle(OPEN_CCW)
+        door_2.ChangeDutyCycle(OPEN_CW)
+        time.sleep(WAIT_TIME)
+        door_1.ChangeDutyCycle(CLOSED_CDC)
+        door_2.ChangeDutyCycle(CLOSED_CDC)
         GPIO.cleanup()
-        self.name.exit()
 
+    def authenticated(self, uID):
+        return True
 
-class TestProcess(threading.Thread):
-    def __init(self):
-        threading.Thread.__init__(self)
-        
-    def run(self):
-        try:
-            global exitProcess
-        except KeyboardInterrupt:
-            exitProcess = True
-gateThread = GateProcess()
-testThread = TestProcess()
-gateThread.start()
-testThread.start()
+    def getNFCUID(self):
+        def end_read():
+            GPIO.cleanup()
+
+        # Hook the SIGINT
+        signal.signal(signal.SIGINT, end_read)
+
+        # Create an object of the class MFRC522
+        MIFAREReader = MFRC522.MFRC522()
+
+        # Scan for cards
+        (status, TagType) = MIFAREReader.MFRC522_Request(MIFAREReader.PICC_REQIDL)
+
+        # If a card is found
+        if status == MIFAREReader.MI_OK:
+            print
+            "Card detected"
+
+        # Get the UID of the card
+        (status, uid) = MIFAREReader.MFRC522_Anticoll()
+
+        # If we have the UID, return it and clean up.
+        if status == MIFAREReader.MI_OK:
+            return uid
+            end_read()
+GateProcess()
