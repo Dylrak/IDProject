@@ -5,7 +5,6 @@ import RPi.GPIO as GPIO
 import time
 import MFRC522
 import signal
-from Database import getNFCUID
 import threading
 
 # constants for GPIO
