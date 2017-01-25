@@ -1,0 +1,3 @@
+SELECT datuminschrijving FROM klantlidmaatschap
+WHERE nfcid=%s AND (datumuitschrijving = Null
+OR datumuitschrijving < current_date)
