@@ -4,16 +4,16 @@ import Gates
 class GUI(Frame):
     def createMenu(self):
         ingang = \
-            Button(self, text="Ingang", command = lambda: Gates.GateProcess(True), sticky=W)
-        ingang.grid(row=0, column=0)
+            Button(self, text="Ingang", command = lambda: Gates.GateProcess(True))
+        ingang.grid(row=0, column=0, sticky=W)
 
         uitgang = \
-            Button(self, text = "Uitgang", command = lambda: Gates.GateProcess(False), sticky=E)
-        uitgang.grid(row=0, column = 1)
+            Button(self, text = "Uitgang", command = lambda: Gates.GateProcess(False))
+        uitgang.grid(row=0, column = 1, sticky=E)
 
         registratie = \
-            Button(self, text = "Registratie", command = lambda: Gates.GateProcess(False), sticky = S)
-        registratie.grid(row=1, column = 0)
+            Button(self, text = "Registratie", command = lambda: Gates.GateProcess(False))
+        registratie.grid(row=1, column = 0, sticky = S)
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
