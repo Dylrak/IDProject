@@ -9,7 +9,7 @@ class GUI(Frame):
 
         uitgang = \
             Button(self, text = "Uitgang", command = lambda: Gates.GateProcess(False))
-        uitgang.grid(row=0, column=0).grid(row=0, column = 1)
+        uitgang.grid(row=0, column = 1)
 
         registratie = \
             Button(self, text = "Registratie", command = lambda: Gates.GateProcess(False))
