@@ -30,5 +30,4 @@ class main:
         root = Tk()
         gui = GUI(master=root)
         gui.mainloop()
-        root.destroy()
 main()
