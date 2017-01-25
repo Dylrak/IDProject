@@ -1,18 +1,18 @@
 from Tkinter import *
-import Gates
+import IO
 
 class GUI(Frame):
     def createMenu(self):
         ingang = \
-            Button(self, text="Ingang", command = lambda: Gates.GateProcess(True))
+            Button(self, text="Ingang", command = lambda: IO.GateProcess(True))
         ingang.pack(fill=X)
 
         uitgang = \
-            Button(self, text = "Uitgang", command = lambda: Gates.GateProcess(False))
+            Button(self, text = "Uitgang", command = lambda: IO.GateProcess(False))
         uitgang.pack(fill=X)
 
         registratie = \
-            Button(self, text = "Registratie", command = lambda: Gates.GateProcess(False))
+            Button(self, text = "Registratie", command = lambda: IO.GateProcess(False))
         registratie.pack(fill=X)
 
     def __init__(self, master=None):
