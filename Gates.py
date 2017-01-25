@@ -4,6 +4,7 @@
 import RPi.GPIO as GPIO
 import time
 from Database_verification import getNFCUID
+import threading
 
 # constants for GPIO
 SERVO_1 = 11
@@ -18,12 +19,16 @@ OPEN_CCW = 2.1
 OPEN_CW = 0.8
 WAIT_TIME = 0.5
 
-class GateProcess:  # Process to authenticate user, then open and close gates
+class GateProcess(threading.Thread):  # Process to authenticate user, then open and close gates
     # global within gateProcess
     door_1 = None
     door_2 = None
 
-    def __init__(self, is_ingang):
+    def __init__(self, threadName):
+        threading.Thread.__init__(self)
+        self.name = threadName
+
+    def run(self, is_ingang):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(SERVO_1, GPIO.OUT)
         GPIO.setup(SERVO_2, GPIO.OUT)
@@ -45,6 +50,7 @@ class GateProcess:  # Process to authenticate user, then open and close gates
         uID = getNFCUID()
         if self.authenticated(uID):
             self.openDoors()
+        GPIO.cleanup()
 
 
     def openDoors(self):
@@ -63,7 +69,6 @@ class GateProcess:  # Process to authenticate user, then open and close gates
         door_2.ChangeDutyCycle(CLOSED)
         GPIO.output(RED_LIGHT, 1)
         time.sleep(WAIT_TIME)
-        GPIO.cleanup()
 
     def authenticated(self, uID):
         return True
