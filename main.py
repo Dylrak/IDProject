@@ -5,19 +5,20 @@ class GUI(Frame):
     def createMenu(self):
         ingang = \
             Button(self, text="Ingang", command = lambda: Gates.GateProcess(True))
-        ingang.grid(row=0, column=0, sticky=W)
+        ingang.pack(fill=X)
 
         uitgang = \
             Button(self, text = "Uitgang", command = lambda: Gates.GateProcess(False))
-        uitgang.grid(row=0, column = 1, sticky=E)
+        uitgang.pack(fill=X)
 
         registratie = \
             Button(self, text = "Registratie", command = lambda: Gates.GateProcess(False))
-        registratie.grid(row=1, column = 0, sticky = S)
+        registratie.pack(fill=X)
 
     def __init__(self, master=None):
         Frame.__init__(self, master)
         self.createMenu()
+        self.pack()
         self.mainloop()
 
 
