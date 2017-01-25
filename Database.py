@@ -2,6 +2,6 @@ import psycopg2
 
 
 try:
-    conn=psycopg2.connect("dbname='Sportschool' user='Postgres' password='omgidpomg'")
+    conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
 except:
-    print("I am unable to connect to the database.")
+    print("Cannot connect to the database!")
