@@ -24,11 +24,7 @@ class GateProcess(threading.Thread):  # Process to authenticate user, then open 
     door_1 = None
     door_2 = None
 
-    def __init__(self, threadName):
-        threading.Thread.__init__(self)
-        self.name = threadName
-
-    def run(self, is_ingang):
+    def __init__(self, is_ingang):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(SERVO_1, GPIO.OUT)
         GPIO.setup(SERVO_2, GPIO.OUT)

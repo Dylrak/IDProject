@@ -1,39 +1,29 @@
 from tkinter import *
 import Gates
-import threading
 
-
-class GUI(Frame, threading.Thread):
+class GUI(Frame):
     def createMenu(self):
         self.ingang = Button(self)
         self.ingang["text"] = "Ingang"
-        self.ingang["command"] = lambda: self.startNewThread(self.ingang["text"])
+        self.ingang["command"] = lambda: Gates.GateProcess(True)
 
         self.ingang.pack({"side": "left"})
 
         self.uitgang = Button(self)
         self.uitgang["text"] = "Uitgang"
-        self.uitgang["command"] = lambda: self.startNewThread(self.ingang["text"])
+        self.uitgang["command"] = lambda: Gates.GateProcess(False)
 
         self.uitgang.pack({"side": "right"})
-    def __init__(self,threadName, master=None ):
+        self.registratie = Button(self)
+        self.registratie["text"] = "Registratie"
+
+        self.registratie.pack({"side": "bottom"})
+    def __init__(self, master=None ):
         Frame.__init__(self, master)
-        self.name = threadName
-        threading.Thread.__init__(self)
         self.pack()
         self.createMenu()
         self.currentThread = None
 
-    def startNewThread(self, mode):
-        if self.currentThread is None:
-            if mode is "Ingang":
-                self.currentThread = Gates.GateProcess(mode)
-                self.currentThread.start(True)
-            elif mode is "Uitgang":
-                self.currentThread = Gates.GateProcess(mode)
-                self.currentThread.start(False)
-            self.currentThread.join()
-            self.currentThread = None
 
 class main:
     def __init__(self):
