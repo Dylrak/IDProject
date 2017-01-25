@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkinter import *
 import Gates
 
 class GUI(Frame):
@@ -17,8 +17,8 @@ class GUI(Frame):
         self.registratie = Button(self)
         self.registratie["text"] = "Registratie"
 
-        self.registratie.pack({"side": "bottom"})
-    def __init__(self, master=None ):
+        self.registratie.pack()
+    def __init__(self, master=None):
         Frame.__init__(self, master)
         self.pack()
         self.createMenu()

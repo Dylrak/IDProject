@@ -19,7 +19,7 @@ OPEN_CCW = 2.1
 OPEN_CW = 0.8
 WAIT_TIME = 0.5
 
-class GateProcess(threading.Thread):  # Process to authenticate user, then open and close gates
+class GateProcess:  # Process to authenticate user, then open and close gates
     # global within gateProcess
     door_1 = None
     door_2 = None
