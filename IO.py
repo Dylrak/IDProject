@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import time
 import MFRC522
 import signal
-import threading
+from Database import authenticate
 
 # constants for GPIO
 SERVO_1 = 11
@@ -44,12 +44,20 @@ class GateProcess:  # Process to authenticate user, then open and close gates
         door_1.start(CLOSED)
         door_2.start(CLOSED)
         GPIO.output(RED_LIGHT, 1)
-        uID = getNFCUID()
-        if self.authenticated(uID):
+        uniqueID = getNFCUID()
+        if authenticate(uniqueID):
             self.openDoors()
+        else:
+            self.showError()
         GPIO.cleanup()
 
 
+    def showError(self):
+        red_on = False
+        for i in range(0, 6):  # For the next 3 seconds, flash red light
+            red_on = not red_on
+            GPIO.output(RED_LIGHT, red_on)
+            time.sleep(WAIT_TIME)
     def openDoors(self):
         door_1.ChangeDutyCycle(OPEN_CCW)
         door_2.ChangeDutyCycle(OPEN_CW)
@@ -66,9 +74,6 @@ class GateProcess:  # Process to authenticate user, then open and close gates
         door_2.ChangeDutyCycle(CLOSED)
         GPIO.output(RED_LIGHT, 1)
         time.sleep(WAIT_TIME)
-
-    def authenticated(self, uID):
-        return True
 
 
 def getNFCUID():
