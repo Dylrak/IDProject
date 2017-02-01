@@ -99,7 +99,7 @@ class GUI(Frame):
                     data += str(entry[1].get())
                 data += ");"
                 addCustomer(data)
-                data = "('" + entries[-2] + "', '" + entries[-1] + "', '%s, %s, %s, %s');" \
+                data = "('" + entries[-2][1].get() + "', '" + entries[-1][1].get() + "', '%s, %s, %s, %s');" \
                                                                    % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
                 addAccount(data)
 
