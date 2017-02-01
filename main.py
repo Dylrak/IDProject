@@ -41,8 +41,8 @@ class GUI(Frame):
                 ent.pack(side=RIGHT, expand=YES, fill=X)
                 entries.append((field, ent))
             row = Frame(root)
-            lab = Label(row, width=15, text='Kies wachtwoord', anchor='w', show="*")
-            ent = Entry(row)
+            lab = Label(row, width=15, text='Kies wachtwoord', anchor='w')
+            ent = Entry(row, show="*")
             row.pack(side=TOP, fill=X, padx=5)
             lab.pack(side=LEFT)
             ent.pack(side=RIGHT, expand=YES, fill=X)
@@ -114,7 +114,7 @@ class GUI(Frame):
 
 
         ents = makeform(window, labels)
-        b1 = Button(window, text='Show',
+        b1 = Button(window, text='Ga door',
                     command=(lambda e=ents: fetch(e)))
         b1.pack(side=LEFT, padx=5, pady=5)
 
