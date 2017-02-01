@@ -39,6 +39,9 @@ class GateProcess:  # Process to authenticate user, then open and close gates
         if is_ingang:
             OPEN_CCW = 0.8
             OPEN_CW = 2.1
+        else:
+			OPEN_CCW = 2.1
+			OPEN_CW = 0.8
         door_1 = GPIO.PWM(SERVO_1, CLOSED_FREQ)
         door_2 = GPIO.PWM(SERVO_2, CLOSED_FREQ)
         door_1.start(CLOSED)
