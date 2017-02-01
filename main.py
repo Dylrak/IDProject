@@ -46,7 +46,7 @@ class GUI(Frame):
             row.pack(side=TOP, fill=X, padx=5)
             lab.pack(side=LEFT)
             ent.pack(side=RIGHT, expand=YES, fill=X)
-            entries.append('Kies wachtwoord', ent)
+            entries.append(('Kies wachtwoord', ent))
             return entries
 
         def fetch(entries):
@@ -95,9 +95,9 @@ class GUI(Frame):
                 uID = IO.getNFCUID()
                 data =  "('%s,%s,%s,%s'" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
                 for entry in entries[:-2]:
-                    data.append(", ")
-                    data.append(str(entry[1].get()))
-                data.append(");")
+                    data += ", "
+                    data += str(entry[1].get())
+                data += ");"
                 addCustomer(data)
                 data = "('" + entries[-2] + "', '" + entries[-1] + "', '%s, %s, %s, %s');" \
                                                                    % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
