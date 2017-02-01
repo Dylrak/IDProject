@@ -2,6 +2,7 @@ import psycopg2
 
 
 def authenticate(uID):
+    string_uID = "%s,%s,%s,%s" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
     try:
         conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
     except:
@@ -9,7 +10,7 @@ def authenticate(uID):
         return False
     cur = conn.cursor
     try:
-        cur.execute("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid=%s AND (datumuitschrijving = Null OR datumuitschrijving < current_date)", uID)  # Using this query,
+        cur.execute("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = %s AND (datumuitschrijving = Null OR datumuitschrijving < current_date);", string_uID)  # Using this query,
         # any values returned will indicate that the user is authenticated.
     except:
         print("Cannot find open subscription!")
@@ -29,7 +30,7 @@ def addCustomer(data):
     try:
         conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
         dat = conn.cursor
-        dat.execute("INSERT INTO klant (nfcid, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode, voornaamklant, achternaamklant, emailadresklant) VALUES ", data)
+        dat.execute("INSERT INTO klant (nfcid, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode, voornaamklant, achternaamklant, emailadresklant) VALUES (%s);", data)
         conn.commit()
         conn.close
     except:
