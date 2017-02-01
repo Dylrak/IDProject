@@ -22,7 +22,7 @@ class GUI(Frame):
         uitgang.pack(fill=X)
 
         registratie = \
-            Button(self.root, text = "Registratie", command = lambda: self.registratieWindow)
+            Button(self.root, text = "Registratie", command = lambda: self.registratieWindow())
         registratie.pack(fill=X)
 
     def registratieWindow(self):
