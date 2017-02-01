@@ -93,11 +93,11 @@ class GUI(Frame):
                 successLabel = Label(success, text=success_text)
                 successLabel.pack()
                 uID = IO.getNFCUID()
-                data =  "('%s,%s,%s,%s'" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
+                data =  "('%s,%s,%s,%s" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
                 for entry in entries[:-2]:
-                    data += ", "
+                    data += "', '"
                     data += str(entry[1].get())
-                data += ");"
+                data += "');"
                 addCustomer(data)
                 data = "('" + entries[-2][1].get() + "', '" + entries[-1][1].get() + "', '%s, %s, %s, %s');" \
                                                                    % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
