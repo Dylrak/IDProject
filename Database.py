@@ -10,7 +10,6 @@ def authenticate(uID):
         return False
     cur = conn.cursor()
     try:
-        print("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = '%s' AND (datumuitschrijving IS NULL OR datumuitschrijving < current_date);" % string_uID)
         cur.execute("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = '%s' AND (datumuitschrijving IS NULL OR datumuitschrijving < current_date);", string_uID)  # Using this query,
         # any values returned will indicate that the user is authenticated.
     except:
@@ -33,7 +32,20 @@ def addCustomer(data):
     try:
         conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
         dat = conn.cursor
-        dat.execute("INSERT INTO klant (nfcid, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode, voornaamklant, achternaamklant, emailadresklant) VALUES (%s);", data)
+        command = "INSERT INTO klant (nfcid, voornaamklant, achternaamklant, emailadresklant, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode) VALUES " + data
+        dat.execute(command)
+        conn.commit()
+        conn.close()
+    except:
+        print("Cannot connect to the database!")
+        return False
+
+def addAccount(data):
+    try:
+        conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
+        dat = conn.cursor
+        command = "INSERT INTO account (gebruikersnaam, wachtwoord, nfcid) VALUES " + data
+        dat.execute(command)
         conn.commit()
         conn.close()
     except:
