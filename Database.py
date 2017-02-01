@@ -8,7 +8,7 @@ def authenticate(uID):
     except:
         print("Cannot connect to the database!")
         return False
-    cur = conn.cursor
+    cur = conn.cursor()
     try:
         cur.execute("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = %s AND (datumuitschrijving = Null OR datumuitschrijving < current_date);", string_uID)  # Using this query,
         # any values returned will indicate that the user is authenticated.
@@ -16,14 +16,15 @@ def authenticate(uID):
         print("Cannot find open subscription!")
     authenticated = False
     try:
-        if cur.fetchone is not None:  # fetchone is a method used to fetch the results of the execute statement above.
+        if cur.fetchone() is not None:  # fetchone is a method used to fetch the results of the execute statement above.
             # It either returns the date of an active subscription, None when it's empty
             # and throws a ProgrammingError if the execute command found absolutely nothing.
             authenticated = True
     except psycopg2.ProgrammingError:
         print("Query returned no results, user is unknown.")
     finally:
-        conn.close
+        cur.close()
+        conn.close()
     return authenticated
 
 def addCustomer(data):
@@ -32,7 +33,7 @@ def addCustomer(data):
         dat = conn.cursor
         dat.execute("INSERT INTO klant (nfcid, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode, voornaamklant, achternaamklant, emailadresklant) VALUES (%s);", data)
         conn.commit()
-        conn.close
+        conn.close()
     except:
         print("Cannot connect to the database!")
         return False
