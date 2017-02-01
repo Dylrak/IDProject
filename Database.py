@@ -10,6 +10,7 @@ def authenticate(uID):
         return False
     cur = conn.cursor()
     try:
+        print("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = '%s' AND (datumuitschrijving IS NULL OR datumuitschrijving < current_date);" % string_uID)
         cur.execute("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = '%s' AND (datumuitschrijving IS NULL OR datumuitschrijving < current_date);", string_uID)  # Using this query,
         # any values returned will indicate that the user is authenticated.
     except:
