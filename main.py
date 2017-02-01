@@ -52,15 +52,15 @@ class GUI(Frame):
                 regex = None
                 if field in ['Voornaam', 'Achternaam', 'Straatnaam', 'Plaats']:
                     regex = "[A-Za-z0-9\-\. ]{3,64}"
-                elif field is 'Emailadres':
+                elif field == 'Emailadres':
                     regex = "([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)"
-                elif field is 'IBAN':
+                elif field == 'IBAN':
                     regex = "[a-zA-Z]{2}[0-9]{2}[a-zA-Z0-9]{4}[0-9]{7}([a-zA-Z0-9]?){0,16}"
-                elif field is 'Huisnummer':
+                elif field == 'Huisnummer':
                     regex = "\d{1,4}"
-                elif field is 'Postcode':
+                elif field == 'Postcode':
                     regex = "\d{4}[a-zA-Z]{2}"
-                elif field is 'Geboortedatum':  # Regex usage is done beforehand to ensure the input is valid in both
+                elif field == 'Geboortedatum':  # Regex usage is done beforehand to ensure the input is valid in both
                     # syntax and information. We use breaks or continues to skip the regex match at the bottom.
                     regex = "(\d{2})\-(\d{2})\-(\d{4})"
                     match = re.search(regex, text)
