@@ -22,7 +22,6 @@ def authenticate(uID):
     except psycopg2.ProgrammingError:
         print("Query returned no results, user is unknown.")
     finally:
-        cur.close
         conn.close
     return authenticated
 
@@ -32,7 +31,6 @@ def addCustomer(data):
         dat = conn.cursor
         dat.execute("INSERT INTO klant (nfcid, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode, voornaamklant, achternaamklant, emailadresklant) VALUES ", data)
         conn.commit()
-        dat.close
         conn.close
     except:
         print("Cannot connect to the database!")
