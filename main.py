@@ -6,13 +6,11 @@ from datetime import datetime
 
 class GUI(Frame):
     def __init__(self, master):
-        Frame.__init__(self, master)
         self.root = Tk()
-        Grid.rowconfigure(self.root, 0, weight=1)
-        Grid.columnconfigure(self.root, 0, weight=1)
+        Frame.__init__(self, master)
         self.createMenu()
         self.pack()
-        self.mainloop()
+        self.root.mainloop()
 
     def createMenu(self):
         ingang = \
