@@ -35,7 +35,7 @@ class GUI(Frame):
                 row = Frame(root)
                 lab = Label(row, width=15, text=field, anchor='w')
                 ent = Entry(row)
-                row.pack(side=TOP, fill=X, padx=5, pady=5)
+                row.pack(side=TOP, fill=X, padx=5)
                 lab.pack(side=LEFT)
                 ent.pack(side=RIGHT, expand=YES, fill=X)
                 entries.append((field, ent))
@@ -46,6 +46,9 @@ class GUI(Frame):
             for entry in entries:
                 field = entry[0]
                 text = entry[1].get()
+                if text is None:
+                    invalid_entry = field
+                    break
                 regex = None
                 if field in ['Voornaam', 'Achternaam', 'Straatnaam', 'Plaats']:
                     regex = "[A-Za-z0-9\-\. ]{3,64}"
@@ -83,7 +86,7 @@ class GUI(Frame):
             else:
                 error_text = invalid_entry + " is ongeldig. Voer alstublieft de juiste gegevens in."
                 error = Toplevel()
-                errorLabel = Label(error, text=error_text, height=0, width=100)
+                errorLabel = Label(error, text=error_text)
                 errorLabel.pack()
 
 
