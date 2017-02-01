@@ -10,10 +10,11 @@ def authenticate(uID):
         return False
     cur = conn.cursor()
     try:
-        cur.execute("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = %s AND (datumuitschrijving = Null OR datumuitschrijving < current_date);", string_uID)  # Using this query,
+        cur.execute("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = '%s' AND (datumuitschrijving IS NULL OR datumuitschrijving < current_date);", string_uID)  # Using this query,
         # any values returned will indicate that the user is authenticated.
     except:
-        print("Cannot find open subscription!")
+        print("Cannot find valid subscription!")
+        return False
     authenticated = False
     try:
         if cur.fetchone() is not None:  # fetchone is a method used to fetch the results of the execute statement above.
