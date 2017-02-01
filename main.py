@@ -7,26 +7,28 @@ from datetime import datetime
 class GUI(Frame):
     def __init__(self, master):
         Frame.__init__(self, master)
+        self.root = Tk()
+        Grid.rowconfigure(self.root, 0, weight=1)
+        Grid.columnconfigure(self.root, 0, weight=1)
         self.createMenu()
         self.pack()
         self.mainloop()
-        self.master = master
 
     def createMenu(self):
         ingang = \
-            Button(self, text="Ingang", command = lambda: IO.GateProcess(True))
+            Button(self.root, text="Ingang", command = lambda: IO.GateProcess(True))
         ingang.pack(fill=X)
 
         uitgang = \
-            Button(self, text = "Uitgang", command = lambda: IO.GateProcess(False))
+            Button(self.root, text = "Uitgang", command = lambda: IO.GateProcess(False))
         uitgang.pack(fill=X)
 
         registratie = \
-            Button(self, text = "Registratie", command = lambda: self.registratieWindow)
+            Button(self.root, text = "Registratie", command = lambda: self.registratieWindow)
         registratie.pack(fill=X)
 
     def registratieWindow(self):
-        window = Toplevel(self.master)
+        window = Toplevel(self.root)
         labels = ('Voornaam', 'Achternaam', 'Emailadres', 'IBAN', 'Geboortedatum', 'Straatnaam', 'Huisnummer', 'Plaats', 'Postcode')
 
         def makeform(root, fields):
@@ -95,8 +97,5 @@ class GUI(Frame):
 
 class main:
     def __init__(self):
-        root = Tk()
-        Grid.rowconfigure(root, 0, weight=1)
-        Grid.columnconfigure(root, 0, weight=1)
-        gui = GUI(master=root)
+        gui = GUI(master=None)
 main()
