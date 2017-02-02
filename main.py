@@ -1,8 +1,9 @@
 from Tkinter import *
 import IO
 import re
+import time
 from datetime import datetime
-from Database import addCustomer, addAccount
+from Database import addCustomer
 
 
 class GUI(Frame):
@@ -73,7 +74,7 @@ class GUI(Frame):
                     regex = "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
                 elif field == 'Geboortedatum':  # Regex usage is done beforehand to ensure the input is valid in both
                     # syntax and information. We use breaks or continues to skip the regex match at the bottom.
-                    regex = "(\d{2})\-(\d{2})\-(\d{4})"
+                    regex = "(\d{1,2})\-(\d{1,2})\-(\d{4})"
                     match = re.search(regex, text)
                     if not match:
                         invalid_entry = field
@@ -81,6 +82,7 @@ class GUI(Frame):
                     else:
                         try:
                             newDate = datetime(int(match.group(3)), int(match.group(2)), int(match.group(1)))
+                            data.append(text)
                         except ValueError:
                             invalid_entry = field
                             break
@@ -91,15 +93,9 @@ class GUI(Frame):
                 else:
                     data.append(text)
             if invalid_entry is None:
-                success_text = "Alle gegevens kloppen. Houdt uw RFID-chip voor de lezer om de registratie te voltooien."
-                success = Toplevel(window)
-                successLabel = Label(success, text=success_text)
-                successLabel.pack()
                 uID = IO.getNFCUID()
-                data.insert(0, "%s,%s,%s,%s" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3])))
-                addCustomer(data[:-2])
-                data.append(uID)
-                addAccount(data[-3:])
+                data.insert(0, uID)
+                addCustomer(data)  # send all but username and password to customer database column
                 window.destroy()
             else:
                 if field == 'Kies wachtwoord':
@@ -112,7 +108,7 @@ class GUI(Frame):
 
 
         ents = makeform(window, labels)
-        b1 = Button(window, text='Ga door',
+        b1 = Button(window, text='Scan NFC-chip',
                     command=(lambda e=ents: fetch(e)))
         b1.pack(side=RIGHT, padx=5, pady=5)
 

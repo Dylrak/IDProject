@@ -108,4 +108,4 @@ def getNFCUID():
         # If we have the UID, return it and clean up.
         if status == MIFAREReader.MI_OK:
             end_read(uid)
-            return uid
+            return "%s,%s,%s,%s" % (str(uid[0]), str(uid[1]), str(uid[2]), str(uid[3]))
