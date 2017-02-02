@@ -92,7 +92,7 @@ class GUI(Frame):
                     data.append(text)
             if invalid_entry is None:
                 success_text = "Alle gegevens kloppen. Houdt uw RFID-chip voor de lezer om de registratie te voltooien."
-                success = Toplevel()
+                success = Toplevel(window)
                 successLabel = Label(success, text=success_text)
                 successLabel.pack()
                 uID = IO.getNFCUID()
@@ -100,13 +100,13 @@ class GUI(Frame):
                 addCustomer(data[:-2])
                 data.append(uID)
                 addAccount(data[-3:])
-
+                window.destroy()
             else:
                 if field == 'Kies wachtwoord':
                     error_text = "Wachtwoord moet minimaal 8 tekens zijn en heeft 1 letter en 1 nummer nodig."
                 else:
                     error_text = invalid_entry + " is ongeldig. Voer alstublieft de juiste gegevens in."
-                error = Toplevel()
+                error = Toplevel(window)
                 errorLabel = Label(error, text=error_text)
                 errorLabel.pack()
 
@@ -114,7 +114,7 @@ class GUI(Frame):
         ents = makeform(window, labels)
         b1 = Button(window, text='Ga door',
                     command=(lambda e=ents: fetch(e)))
-        b1.pack(side=LEFT, padx=5, pady=5)
+        b1.pack(side=RIGHT, padx=5, pady=5)
 
 
 class main:
