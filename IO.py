@@ -87,6 +87,7 @@ def getNFCUID():
         global continue_reading
         print("uID is: %s,%s,%s,%s" % (str(uid[0]), str(uid[1]), str(uid[2]), str(uid[3])))
         continue_reading = False
+        GPIO.cleanup()
 
     # Hook the SIGINT
     signal.signal(signal.SIGINT, end_read)
