@@ -96,6 +96,7 @@ class GUI(Frame):
                 successLabel = Label(success, text=success_text)
                 successLabel.pack()
                 uID = IO.getNFCUID()
+                print(uID)
                 data.insert(0, "%s,%s,%s,%s" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3])))
                 addCustomer(data[:-2])
                 data.append(uID)
