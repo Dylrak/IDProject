@@ -32,8 +32,8 @@ def addCustomer(data):
     try:
         conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
         dat = conn.cursor()
-        command = "INSERT INTO klant (nfcid, voornaamklant, achternaamklant, emailadresklant, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode) VALUES " + data
-        dat.execute(command)
+        command = "INSERT INTO klant (nfcid, voornaamklant, achternaamklant, emailadresklant, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
+        dat.execute(command, data)
         conn.commit()
         conn.close()
     except:
@@ -44,8 +44,8 @@ def addAccount(data):
     try:
         conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
         dat = conn.cursor()
-        command = "INSERT INTO account (gebruikersnaam, wachtwoord, nfcid) VALUES " + data
-        dat.execute(command)
+        command = "INSERT INTO account (gebruikersnaam, wachtwoord, nfcid) VALUES (%s, %s, %s);"
+        dat.execute(command, data)
         conn.commit()
         conn.close()
     except:

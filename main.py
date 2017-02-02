@@ -51,6 +51,7 @@ class GUI(Frame):
 
         def fetch(entries):
             invalid_entry = None
+            data = []
             for entry in entries:
                 field = entry[0]
                 text = entry[1].get()
@@ -87,21 +88,18 @@ class GUI(Frame):
                 if not re.match(regex, text):
                     invalid_entry = field
                     break
+                else:
+                    data.append(text)
             if invalid_entry is None:
                 success_text = "Alle gegevens kloppen. Houdt uw RFID-chip voor de lezer om de registratie te voltooien."
                 success = Toplevel()
                 successLabel = Label(success, text=success_text)
                 successLabel.pack()
                 uID = IO.getNFCUID()
-                data =  "('%s,%s,%s,%s" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
-                for entry in entries[:-2]:
-                    data += "', '"
-                    data += str(entry[1].get())
-                data += "');"
-                addCustomer(data)
-                data = "('" + entries[-2][1].get() + "', '" + entries[-1][1].get() + "', '%s, %s, %s, %s');" \
-                                                                   % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
-                addAccount(data)
+                data.insert(0, "%s,%s,%s,%s" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3])))
+                addCustomer(data[:-2])
+                data.append(uID)
+                addAccount(data[-3:])
 
             else:
                 if field == 'Kies wachtwoord':
