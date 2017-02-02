@@ -1,9 +1,8 @@
 from Tkinter import *
-import IO
+from IO import GateProcess, getNFCUID
 import re
-import time
 from datetime import datetime
-from Database import addCustomer
+from Database import *
 
 
 class GUI(Frame):
@@ -16,15 +15,23 @@ class GUI(Frame):
 
     def createMenu(self):
         ingang = \
-            Button(self.root, text="Ingang", command = lambda: IO.GateProcess(True))
+            Button(self.root, text="Ingang", command = lambda: GateProcess(True))
         ingang.pack(fill=X)
 
         uitgang = \
-            Button(self.root, text = "Uitgang", command = lambda: IO.GateProcess(False))
+            Button(self.root, text = "Uitgang", command = lambda: GateProcess(False))
         uitgang.pack(fill=X)
 
+        lopendeband = \
+            Button(self.root, text="Lopende band", command=lambda: customerDevice(1, getNFCUID()))
+        lopendeband.pack(fill=X)
+
+        spinning = \
+            Button(self.root, text="Lopende band", command=lambda: customerDevice(2, getNFCUID()))
+        spinning.pack(fill=X)
+
         registratie = \
-            Button(self.root, text = "Registratie", command = lambda: self.registratieWindow())
+            Button(self.root, text="Registratie", command=lambda: self.registratieWindow())
         registratie.pack(fill=X)
 
     def registratieWindow(self):
@@ -93,7 +100,7 @@ class GUI(Frame):
                 else:
                     data.append(text)
             if invalid_entry is None:
-                uID = IO.getNFCUID()
+                uID = getNFCUID()
                 data.insert(0, uID)
                 addCustomer(data)  # send all but username and password to customer database column
                 window.destroy()
