@@ -1,8 +1,8 @@
 from Tkinter import *
-import IO
+from IO import GateProcess, getNFCUID
 import re
 from datetime import datetime
-from Database import addCustomer, addAccount
+from Database import *
 
 
 class GUI(Frame):
@@ -15,15 +15,23 @@ class GUI(Frame):
 
     def createMenu(self):
         ingang = \
-            Button(self.root, text="Ingang", command = lambda: IO.GateProcess(True))
+            Button(self.root, text="Ingang", command = lambda: GateProcess(True))
         ingang.pack(fill=X)
 
         uitgang = \
-            Button(self.root, text = "Uitgang", command = lambda: IO.GateProcess(False))
+            Button(self.root, text = "Uitgang", command = lambda: GateProcess(False))
         uitgang.pack(fill=X)
 
+        lopendeband = \
+            Button(self.root, text="Lopende band", command=lambda: customerDevice(1, getNFCUID()))
+        lopendeband.pack(fill=X)
+
+        spinning = \
+            Button(self.root, text="Lopende band", command=lambda: customerDevice(2, getNFCUID()))
+        spinning.pack(fill=X)
+
         registratie = \
-            Button(self.root, text = "Registratie", command = lambda: self.registratieWindow())
+            Button(self.root, text="Registratie", command=lambda: self.registratieWindow())
         registratie.pack(fill=X)
 
     def registratieWindow(self):
@@ -73,7 +81,7 @@ class GUI(Frame):
                     regex = "^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$"
                 elif field == 'Geboortedatum':  # Regex usage is done beforehand to ensure the input is valid in both
                     # syntax and information. We use breaks or continues to skip the regex match at the bottom.
-                    regex = "(\d{2})\-(\d{2})\-(\d{4})"
+                    regex = "(\d{1,2})\-(\d{1,2})\-(\d{4})"
                     match = re.search(regex, text)
                     if not match:
                         invalid_entry = field
@@ -81,6 +89,7 @@ class GUI(Frame):
                     else:
                         try:
                             newDate = datetime(int(match.group(3)), int(match.group(2)), int(match.group(1)))
+                            data.append(text)
                         except ValueError:
                             invalid_entry = field
                             break
@@ -91,16 +100,9 @@ class GUI(Frame):
                 else:
                     data.append(text)
             if invalid_entry is None:
-                success_text = "Alle gegevens kloppen. Houdt uw RFID-chip voor de lezer om de registratie te voltooien."
-                success = Toplevel(window)
-                successLabel = Label(success, text=success_text)
-                successLabel.pack()
-                uID = IO.getNFCUID()
-                print(uID)
-                data.insert(0, "%s,%s,%s,%s" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3])))
-                addCustomer(data[:-2])
-                data.append(uID)
-                addAccount(data[-3:])
+                uID = getNFCUID()
+                data.insert(0, uID)
+                addCustomer(data)  # send all but username and password to customer database column
                 window.destroy()
             else:
                 if field == 'Kies wachtwoord':
@@ -113,7 +115,7 @@ class GUI(Frame):
 
 
         ents = makeform(window, labels)
-        b1 = Button(window, text='Ga door',
+        b1 = Button(window, text='Scan NFC-chip',
                     command=(lambda e=ents: fetch(e)))
         b1.pack(side=RIGHT, padx=5, pady=5)
 

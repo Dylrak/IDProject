@@ -2,7 +2,6 @@ import psycopg2
 
 
 def authenticate(uID):
-    string_uID = "%s,%s,%s,%s" % (str(uID[0]), str(uID[1]), str(uID[2]), str(uID[3]))
     try:
         conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
     except Exception as e:
@@ -10,7 +9,8 @@ def authenticate(uID):
         return False
     cur = conn.cursor()
     try:
-        cur.execute("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = '%s' AND (datumuitschrijving IS NULL OR datumuitschrijving < current_date);", string_uID)  # Using this query,
+		print("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = '%s' AND (datumuitschrijving IS NULL OR datumuitschrijving < current_date);" % uID)
+		cur.execute("SELECT datuminschrijving FROM klantlidmaatschap WHERE nfcid = %s AND (datumuitschrijving IS NULL OR datumuitschrijving < current_date);", (uID,))  # Using this query,
         # any values returned will indicate that the user is authenticated.
     except Exception as e:
         print(e)
@@ -30,27 +30,39 @@ def authenticate(uID):
         conn.close()
     return authenticated
 
-def addCustomer(data):
+def customerDevice(deviceID, uID):
     try:
-        conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
+        conn = psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
         dat = conn.cursor()
-        command = "INSERT INTO klant (nfcid, voornaamklant, achternaamklant, emailadresklant, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s);"
-        print(command % data)
-        dat.execute(command, data)
-        conn.commit()
+        dat.execute("SELECT begintijd FROM klantapparaat WHERE nfcid = %s AND eindtijd IS NULL", uID)
+        ingecheckt = dat.fetchone()
+        if ingecheckt is not None:
+            dat.execute("UPDATE klantapparaat SET eindtijd=LOCALTIMESTAMP(0) WHERE nfcid = %s AND begintijd=%s", (uID, ingecheckt))
+        else:
+            command = "INSERT INTO klantapparaat (nfcid, apparaatid, begintijd, eindtijd) VALUES ('%s', '%s', LOCALTIMESTAMP(0), NULL)" % (uID, deviceID)
+            print(command)
+            dat.execute(command)
     except Exception as e:
         print(e)
     finally:
         dat.close()
         conn.close()
 
-def addAccount(data):
+def addCustomer(data):
     try:
         conn=psycopg2.connect("dbname='Sportschool' user='postgres' host='192.168.1.2' password='omgidpomg'")
         dat = conn.cursor()
-        command = "INSERT INTO account (gebruikersnaam, wachtwoord, nfcid) VALUES (%s, %s, %s);"
-        print(command % data)
-        dat.execute(command, data)
+        command = "INSERT INTO klant (nfcid, voornaamklant, achternaamklant, emailadresklant, iban, geboortedatum, straatnaam, huisnummer, plaats, postcode) VALUES ('"
+        command += "', '".join(data[:-2]) + "');"
+        print(command)
+        dat.execute(command)
+        data.append(data[0])
+        command = "INSERT INTO account (gebruikersnaam, wachtwoord, nfcid) VALUES ('%s', '%s', '%s');" % data[-3:]
+        print(command)
+        dat.execute(command)
+        command = "INSERT INTO klantlidmaatschap (nfcid, lidmaatschapid, datuminschrijving) VALUES ('%s', 1, CURRENT_DATE);" % data[0]
+        print(command)
+        dat.execute(command)
         conn.commit()
     except Exception as e:
         print(e)
