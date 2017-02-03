@@ -38,9 +38,11 @@ def addCustomer(data):
         print(command % data)
         dat.execute(command, data)
         conn.commit()
-        conn.close()
     except Exception as e:
         print(e)
+    finally:
+        dat.close()
+        conn.close()
 
 def addAccount(data):
     try:
@@ -50,6 +52,8 @@ def addAccount(data):
         print(command % data)
         dat.execute(command, data)
         conn.commit()
-        conn.close()
     except Exception as e:
         print(e)
+    finally:
+        dat.close()
+        conn.close()
