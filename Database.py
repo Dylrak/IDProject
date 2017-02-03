@@ -39,9 +39,8 @@ def customerDevice(deviceID, uID):
         if ingecheckt is not None:
             dat.execute("UPDATE klantapparaat SET eindtijd=LOCALTIMESTAMP(0) WHERE nfcid = %s AND begintijd=%s", (uID, ingecheckt))
         else:
-            command = "INSERT INTO klantapparaat (nfcid, apparaatid, begintijd, eindtijd) VALUES ('%s', '%s', LOCALTIMESTAMP(0), NULL)" % (uID, deviceID)
-            print(command)
-            dat.execute(command)
+            print("INSERT INTO klantapparaat (nfcid, apparaatid, begintijd, eindtijd) VALUES ('%s', '%s', LOCALTIMESTAMP(0), NULL)" % (uID, deviceID))
+            dat.execute("INSERT INTO klantapparaat (nfcid, apparaatid, begintijd, eindtijd) VALUES (%s, %s, LOCALTIMESTAMP(0), NULL)", (uID, deviceID))
     except Exception as e:
         print(e)
     finally:
