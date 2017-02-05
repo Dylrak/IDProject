@@ -27,7 +27,7 @@ class GUI(Frame):
         lopendeband.pack(fill=X)
 
         spinning = \
-            Button(self.root, text="Lopende band", command=lambda: customerDevice(2, getNFCUID()))
+            Button(self.root, text="Spinning", command=lambda: customerDevice(2, getNFCUID()))
         spinning.pack(fill=X)
 
         registratie = \

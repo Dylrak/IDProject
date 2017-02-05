@@ -5,7 +5,7 @@ import RPi.GPIO as GPIO
 import time
 import MFRC522
 import signal
-from Database import authenticate
+from Database import authenticate, customerGym
 
 # constants for GPIO
 SERVO_1 = 11
@@ -49,7 +49,8 @@ class GateProcess:  # Process to authenticate user, then open and close gates
         GPIO.output(RED_LIGHT, 1)
         uniqueID = getNFCUID()
         if authenticate(uniqueID):
-            self.openDoors()
+			customerGym(uniqueID, is_ingang)
+			self.openDoors()
         else:
             self.showError()
         GPIO.cleanup()
@@ -87,7 +88,6 @@ def getNFCUID():
         global continue_reading
         print("uID is: %s,%s,%s,%s" % (str(uid[0]), str(uid[1]), str(uid[2]), str(uid[3])))
         continue_reading = False
-        GPIO.cleanup()
 
     # Hook the SIGINT
     signal.signal(signal.SIGINT, end_read)
